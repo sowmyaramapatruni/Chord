@@ -16,16 +16,16 @@ GO library stdlog
 Linux Environment
 
 How to execute:
-⋅⋅* Install stdlog library using make configure
-⋅⋅* make build
+ * Install stdlog library using make configure
+ * make build
 ./main -log=<loglevel>
-⋅⋅* Specifying log level is optional, default log level is 'info'
+ * Specifying log level is optional, default log level is 'info'
   
 # Assumptions:
-⋅⋅* Initially only one node is present in the ring
-⋅⋅* Two consecutive join/leave ring command, should have an offset of at-least stabilization period, defined in the configuration
-⋅⋅* Mode of leave-ring is randomized, with 50-50 chances to be 'orderly' or 'immediate'
-⋅⋅* The key to be inserted has to be an integer between 0 and ring size, last value excluded
+ * Initially only one node is present in the ring
+ * Two consecutive join/leave ring command, should have an offset of at-least stabilization period, defined in the configuration
+ * Mode of leave-ring is randomized, with 50-50 chances to be 'orderly' or 'immediate'
+ * The key to be inserted has to be an integer between 0 and ring size, last value excluded
 
 # Implemention summary:
 1. Config: Defines all the events as JSON that needs to be passed as an INPUT (file name is fixed as 'config')
@@ -40,20 +40,21 @@ How to execute:
 10. Enums.go: Statically defines all the events/message
 
 # Configuration Details:
-⋅⋅* JSON format must to be maintained
-⋅⋅* ring.size specifies the total number possible in the ring
-⋅⋅* If ring.size is 5 implies total size is 2^5 = 32
-⋅⋅* startup.node.id specifies the IP address of the node, that is present at the ring startup [Assumption 1]
- ⋅⋅* stabilize.period.millis specifies the period in milli seconds, at which coordinator will send the stabilize command to all the nodes
+ * JSON format must to be maintained
+ * ring.size specifies the total number possible in the ring.
+ 
+ * If ring.size is 5 implies total size is 2^5 = 32.
+ * startup.node.id specifies the IP address of the node, that is present at the ring startup [Assumption 1]
+ * stabilize.period.millis specifies the period in milli seconds, at which coordinator will send the stabilize command to all the nodes
 
-# Recommended : Not to reduce the the stabilization period to be less than 7 seconds
-⋅⋅* liveChanges specifies the live commands/changes that coordinator will manage
-⋅⋅* id specifies the node IP address to which the command would be sent
-⋅⋅* timeInMillis specifies the time offset in milli seconds of the command to be sent after
-⋅⋅* action specifies join-ring/leave-ring command to be send to a node
-⋅⋅* query specifies the hash query put/get/remove to be sent to a node
-⋅⋅* data option comes with query to specify the key/value pair, needed to complete the query
-⋅⋅* Either action or query should be used for sending the command
-⋅⋅* query and data must be defined together
-⋅⋅* For get/remove query speficy only the key
-⋅⋅* For put query specify in the format key=value
+ * Recommended : Not to reduce the the stabilization period to be less than 7 seconds
+ * liveChanges specifies the live commands/changes that coordinator will manage
+ * id specifies the node IP address to which the command would be sent
+ * timeInMillis specifies the time offset in milli seconds of the command to be sent after
+ * action specifies join-ring/leave-ring command to be send to a node
+ * query specifies the hash query put/get/remove to be sent to a node
+ * data option comes with query to specify the key/value pair, needed to complete the query
+ * Either action or query should be used for sending the command
+ * query and data must be defined together
+ * For get/remove query speficy only the key
+ * For put query specify in the format key=value
